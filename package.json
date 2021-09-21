@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/sebastianrcnt/korean-lang-utils/issues"
   },
-  "homepage": "https://github.com/sebastianrcnt/korean-lang-utils#readme"
+  "homepage": "https://github.com/sebastianrcnt/korean-lang-utils#readme",
+  "devDependencies": {
+    "typescript": "^4.4.3"
+  }
 }
