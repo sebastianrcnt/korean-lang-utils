@@ -233,8 +233,6 @@ const typewrite = (sentence: string) => {
       }
     }
 
-    console.log({ stack, letterString });
-
     stack.forEach((s) => {
       history.push(prev + s);
     });
