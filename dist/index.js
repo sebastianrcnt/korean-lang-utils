@@ -1,96 +1,12 @@
 "use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.typewrite = void 0;
-const TOP_ATOMS = [
-    "ㄱ",
-    "ㄲ",
-    "ㄴ",
-    "ㄷ",
-    "ㄸ",
-    "ㄹ",
-    "ㅁ",
-    "ㅂ",
-    "ㅃ",
-    "ㅅ",
-    "ㅆ",
-    "ㅇ",
-    "ㅈ",
-    "ㅉ",
-    "ㅊ",
-    "ㅋ",
-    "ㅌ",
-    "ㅍ",
-    "ㅎ",
-];
-const MID_ATOMS = [
-    "ㅏ",
-    "ㅐ",
-    "ㅑ",
-    "ㅒ",
-    "ㅓ",
-    "ㅔ",
-    "ㅕ",
-    "ㅖ",
-    "ㅗ",
-    "ㅘ",
-    "ㅙ",
-    "ㅚ",
-    "ㅛ",
-    "ㅜ",
-    "ㅝ",
-    "ㅞ",
-    "ㅟ",
-    "ㅠ",
-    "ㅡ",
-    "ㅢ",
-    "ㅣ",
-];
-const BOTTOM_ATOMS = [
-    "",
-    "ㄱ",
-    "ㄲ",
-    "ㄳ",
-    "ㄴ",
-    "ㄵ",
-    "ㄶ",
-    "ㄷ",
-    "ㄹ",
-    "ㄺ",
-    "ㄻ",
-    "ㄼ",
-    "ㄽ",
-    "ㄾ",
-    "ㄿ",
-    "ㅀ",
-    "ㅁ",
-    "ㅂ",
-    "ㅄ",
-    "ㅅ",
-    "ㅆ",
-    "ㅇ",
-    "ㅈ",
-    "ㅊ",
-    "ㅋ",
-    "ㅌ",
-    "ㅍ",
-    "ㅎ",
-];
-const reverseMapify = (source) => {
-    const result = new Map();
-    for (let index = 0; index < source.length; index++) {
-        result.set(source[index], index);
-    }
-    return result;
-};
-const topAtomsIndexMap = reverseMapify(TOP_ATOMS);
-const midAtomsIndexMap = reverseMapify(MID_ATOMS);
-const bottomAtomsIndexMap = reverseMapify(BOTTOM_ATOMS);
+const constants_1 = require("./constants");
+const errors_1 = require("./errors");
+const utils_1 = require("./utils");
+const topAtomsIndexMap = (0, utils_1.reverseMapify)(constants_1.TOP_ATOMS);
+const midAtomsIndexMap = (0, utils_1.reverseMapify)(constants_1.MID_ATOMS);
+const bottomAtomsIndexMap = (0, utils_1.reverseMapify)(constants_1.BOTTOM_ATOMS);
 const isLetter = (letter) => {
     return letter.length <= 1;
 };
@@ -100,9 +16,9 @@ const getCharCode = (letter) => {
     }
     return letter.charCodeAt(0);
 };
-const getTopAtomByIndex = (index) => TOP_ATOMS[index];
-const getMidAtomByIndex = (index) => MID_ATOMS[index];
-const getBottomAtomByIndex = (index) => BOTTOM_ATOMS[index];
+const getTopAtomByIndex = (index) => constants_1.TOP_ATOMS[index];
+const getMidAtomByIndex = (index) => constants_1.MID_ATOMS[index];
+const getBottomAtomByIndex = (index) => constants_1.BOTTOM_ATOMS[index];
 const getIndexOfTopAtom = (topAtom) => topAtomsIndexMap.get(topAtom);
 const getIndexOfMidAtom = (midAtom) => midAtomsIndexMap.get(midAtom);
 const getIndexOfBottomAtom = (bottomAtom) => bottomAtomsIndexMap.get(bottomAtom);
@@ -131,40 +47,13 @@ const isCompleteLetter = (letterString) => {
     const code = getCharCode(letterString);
     return 0xac00 <= code && code <= 0xd7a3;
 };
-const injectCustomErrorMessage = (errorMessage) => {
-    return function classDecorator(constructor) {
-        return class extends constructor {
-            constructor(...args) {
-                super(errorMessage);
-            }
-        };
-    };
-};
-let InvalidLetterLengthException = class InvalidLetterLengthException extends Error {
-};
-InvalidLetterLengthException = __decorate([
-    injectCustomErrorMessage("글자의 길이는 1 이하여야 합니다")
-], InvalidLetterLengthException);
-let NotHangulLetterException = class NotHangulLetterException extends Error {
-};
-NotHangulLetterException = __decorate([
-    injectCustomErrorMessage("한글 글자가 아닙니다")
-], NotHangulLetterException);
-let AlreadyDisassembledLetterException = class AlreadyDisassembledLetterException extends Error {
-};
-AlreadyDisassembledLetterException = __decorate([
-    injectCustomErrorMessage("더 이상 분해할 수 없는 기본 음운입니다")
-], AlreadyDisassembledLetterException);
 const disassembleLetter = (letterString) => {
-    if (!isLetter(letterString)) {
-        throw new InvalidLetterLengthException();
-    }
-    if (!isHangul(letterString)) {
-        throw new NotHangulLetterException();
-    }
-    if (!isCompleteLetter(letterString)) {
-        throw new AlreadyDisassembledLetterException();
-    }
+    if (!isLetter(letterString))
+        throw new errors_1.InvalidLetterLengthException();
+    if (!isHangul(letterString))
+        throw new errors_1.NotHangulLetterException();
+    if (!isCompleteLetter(letterString))
+        throw new errors_1.AlreadyDisassembledLetterException();
     const charCode = getCharCode(letterString);
     const topIndex = Math.floor((charCode - 44032) / 21 / 28);
     const midIndex = Math.floor((charCode - 44032 - topIndex * 21 * 28) / 28);
@@ -197,10 +86,10 @@ const typewrite = (sentence) => {
             }
         }
         catch (error) {
-            if (error instanceof NotHangulLetterException) {
+            if (error instanceof errors_1.NotHangulLetterException) {
                 stack.push(letterString);
             }
-            else if (error instanceof AlreadyDisassembledLetterException) {
+            else if (error instanceof errors_1.AlreadyDisassembledLetterException) {
                 stack.push(letterString);
             }
             else {
@@ -215,3 +104,4 @@ const typewrite = (sentence) => {
     return history;
 };
 exports.typewrite = typewrite;
+globalThis.typewrite = typewrite;
