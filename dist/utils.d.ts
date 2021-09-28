@@ -1,1 +1,11 @@
-export declare const reverseMapify: <T>(source: T[]) => Map<T, number>;
+export declare const getCharCode: (letter: string) => number;
+export declare const getTopAtomByIndex: (index: number) => string;
+export declare const getMidAtomByIndex: (index: number) => string;
+export declare const getBottomAtomByIndex: (index: number) => string;
+export declare const getIndexOfTopAtom: (topAtom: string) => number | undefined;
+export declare const getIndexOfMidAtom: (midAtom: string) => number | undefined;
+export declare const getIndexOfBottomAtom: (bottomAtom: string) => number | undefined;
+export declare const isHangul: (letterString: string) => boolean;
+export declare const isLetter: (letter: string) => boolean;
+export declare const isCompleteLetter: (letterString: string) => boolean;
+export declare const serializeLetterObject: (letterObject: ILetterObject) => string[];
